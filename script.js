@@ -55,7 +55,7 @@ console.log(cookieMessage.getBoundingClientRect());
 console.log(cookieMessage.getBoundingClientRect().width);
 console.log(cookieMessage.getBoundingClientRect().height);
 //setting properties of whole root 
-document.documentElement.style.setProperty('--color-primary','orangered'); 
+// document.documentElement.style.setProperty('--color-primary','orangered'); 
 let logo=document.querySelector('.nav__logo');
 console.log(logo.src);
 console.log(logo.className);
@@ -95,3 +95,81 @@ let mouseHover=function(){
 heading.addEventListener('mouseenter',mouseHover)
 setTimeout(()=>heading.removeEventListener('mouseenter',mouseHover
 ),5000);
+//-------------------------------------Event Propogation and Bubbling---------------------
+//random number generator for rgb
+let randomRGBNum=(min,max)=>{
+  return `${Math.trunc(Math.random()*(max-min+1)+min)}`
+}
+let randomRGB=()=>{
+ return `rgb(${randomRGBNum(0,255)},${randomRGBNum(0,255)},${randomRGBNum(0,255)})`
+}
+console.log(randomRGB());
+
+//-----------------------------IMPLEMENTING EVENT PROPOGATION IN PROJECT------------------
+// document.querySelectorAll('.nav__link').forEach((el)=>{
+//   el.addEventListener('click',function(e){
+//     e.preventDefault();
+//     let id=el.getAttribute('href');
+//     console.log(id);
+//     document.querySelector(`${id}`).scrollIntoView({behavior:'smooth'});
+//   })
+// })
+document.querySelector('.nav__links').addEventListener('click',function(e){
+e.preventDefault();
+//console.log(e.currentTarget);
+if(e.target.classList.contains('nav__link')){
+  //console.log(e.currentTarget);
+  let id=e.target.getAttribute('href');
+ document.querySelector(`${id}`).scrollIntoView({behavior:'smooth'});
+
+}
+
+})
+//-----------------------------TRAVERSING THROUGH DOM----------------------
+// let headingh1=document.querySelector('h1');
+// let navLinks=document.querySelector('.nav__links');
+
+// //going down in the tree
+// console.log(headingh1.childNodes);
+// console.log(headingh1.children);
+// headingh1.firstElementChild.style.color='black';
+// headingh1.lastElementChild.style.color='orangered';
+// //going up in the tree
+// console.log(headingh1.parentNode);
+// console.log(headingh1.parentElement);
+// console.log(navLinks.closest('.nav'));
+// //all the childs of an element
+// console.log(headingh1.parentElement.children);
+// [...headingh1.parentElement.children].forEach((el)=>{
+//   if(el!=='h1') el.style.backgroundColor='red'; 
+// })
+//---------------------------TABBED SECTION------------------------------
+let tabContainer=document.querySelector('.operations__tab-container');
+let tabBtns=document.querySelectorAll('.operations__tab');
+let tabContent=document.querySelectorAll('.operations__content');
+tabContainer.addEventListener('click',function(e){
+let clicked=e.target.closest('.operations__tab');
+console.log(clicked);
+if(!clicked) return;
+tabBtns.forEach((btn)=>{
+btn.classList.remove('operations__tab--active')
+});
+clicked.classList.add('operations__tab--active');
+// tabContent.forEach((tab)=>{
+//   tab.classList.add('hidden')
+// tab.classList.a
+tabContent.forEach((tab)=>tab.classList.remove('operations__content--active'));
+document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add('operations__content--active');
+});
+
+
+
+
+
+
+
+
+
+
+
+
