@@ -161,6 +161,117 @@ clicked.classList.add('operations__tab--active');
 tabContent.forEach((tab)=>tab.classList.remove('operations__content--active'));
 document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add('operations__content--active');
 });
+//-------------------------------------------HOVER FEATURE------------------------------
+//Handler function for hover feature
+let hover=function(e){
+  if(e.target.classList.contains('nav__link')){
+    let link=e.target;
+    let siblings=e.target.closest('.nav').querySelectorAll('.nav__link');
+    let logo=link.closest('.nav').querySelector('img');
+    siblings.forEach((sib)=>
+    {if(sib!==link){
+    sib.style.opacity=this;
+    logo.style.opacity=this;
+    }});
+    }
+}
+let navLinks=document.querySelectorAll('.nav__links');
+let nav=document.querySelector('.nav');
+// nav.addEventListener('mouseover',hover.bind(0.5));
+// nav.addEventListener('mouseout',hover.bind(1));
+// //--------------------SCROLL FEATURE----------------------------------------------
+// let initcords=section1.getBoundingClientRect();
+// window.addEventListener('scroll',function(){
+// if(window.scrollY>initcords.top){
+//   nav.classList.add('sticky');
+// }else{
+//   nav.classList.remove('sticky');
+// }
+// })
+//-------------------INTERSECTION OBSERVER API--------------------------------------
+let obserFun=function(entries,observer){
+entries.forEach((entry)=>{console.log(entry);
+if(entry.isIntersecting){
+console.log('Intersected');
+}})
+}
+let obserObj={
+  root:null,
+  threshold:0.1
+}
+let observer=new IntersectionObserver(obserFun,obserObj);
+
+observer.observe(section1);
+//-------------------------------------
+const header=document.querySelector('.header');
+let sticky=function(entries){
+  //console.log(entries);
+  const [entry]=entries;
+if(!entry.isIntersecting){
+  nav.classList.add('sticky');
+}else{
+  nav.classList.remove('sticky');
+}
+}
+let headerObserver=new IntersectionObserver(sticky,{
+  root:null,
+  threshold:0,
+  rootMargin:'-90px'
+})
+headerObserver.observe(header);
+//---------------------------------------REVEALING SCROLL-----------------------
+let allSections=document.querySelectorAll('.section');
+
+let scrollObs=function(entries){
+let [entry]=entries;
+console.log(entry);
+entry.target.classList.remove('section--hidden');
+scrollObserver.unobserve(entry.target);
+console.log('unobserved');
+}
+let scrollObserver=new IntersectionObserver(scrollObs,{
+  root:null,
+  threshold:0.15
+})
+allSections.forEach((sect)=>{
+  sect.classList.add('section--hidden');
+  scrollObserver.observe(sect);
+})
+//----------------------------------Lazy Loading images----------------------------
+let allImages=document.querySelectorAll('img[data-src]');
+let lazyLoadFun=function(entries){
+  let [entry]=entries;
+allImages.forEach((img)=>{
+  entry.target.src=entry.target.dataset.src;
+  entry.target.addEventListener('load',function(){
+    entry.target.classList.remove('lazy-img');
+  })
+})
+
+
+}
+let lazyLoadingObs=new IntersectionObserver(lazyLoadFun,{
+  root:null,
+  threshold:0
+})
+allImages.forEach((img)=>lazyLoadingObs.observe(img));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
